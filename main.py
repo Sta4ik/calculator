@@ -8,9 +8,17 @@ def inputToEntry(entry, inputElement):
 def deleteInEntry(entry):
     entry.delete(len(entry.get()) - 1, '')
 
+def deleteAllInEntry(entry):
+    entry.delete(0, END)
+
 def calculate(entry):
     expression = entry.get()
-    print(expression)
+    expression = expression.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan").replace("sqrt", "math.sqrt").replace("^", "**").replace("factorial", "math.factorial")
+    entry.delete(0, END)
+    try:
+        entry.insert(END, eval(expression))
+    except:
+        entry.insert(END, "Error")
 
 def main():
     root = Tk()
@@ -18,16 +26,20 @@ def main():
     root.resizable(False, False)
     root.geometry("260x420")
 
+    root.call('source', 'forest-dark.tcl')
+    style = Style()
+    style.theme_use("forest-dark")
+
     entry = Entry(root)
     entry.place(x=15, y=20, width=230, height=30)
 
     buttonPow = Button(root, text="^", command=lambda: inputToEntry(entry, "^"))
     buttonPow.place(x=20, y=70, width=40, height=40)
 
-    buttonSqrt = Button(root, text="sqrt", command=lambda: inputToEntry(entry, "sqrt("))
+    buttonSqrt = Button(root, text="√", command=lambda: inputToEntry(entry, "sqrt("))
     buttonSqrt.place(x=80, y=70, width=40, height=40)
 
-    buttonFact = Button(root, text="!", command=lambda: inputToEntry(entry, "!"))
+    buttonFact = Button(root, text="!", command=lambda: inputToEntry(entry, "factorial("))
     buttonFact.place(x=140, y=70, width=40, height=40)
 
     buttonOpen = Button(root, text="(", command=lambda: inputToEntry(entry, "("))
@@ -97,7 +109,10 @@ def main():
     buttonEqual.place(x=200, y=370, width=40, height=40)
 
     buttonClear = Button(root, text="C", command=lambda: deleteInEntry(entry))
-    buttonClear.place(x=20, y=370, width=160, height=40)
+    buttonClear.place(x=20, y=370, width=100, height=40)
+
+    buttonClearAll = Button(root, text="AC", command=lambda: deleteAllInEntry(entry))
+    buttonClearAll.place(x=140, y=370, width=40, height=40)
 
     root.mainloop()
 
